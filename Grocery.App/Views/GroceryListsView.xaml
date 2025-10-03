@@ -11,7 +11,7 @@
             <Label Text="Boodschappenlijsten" FontSize="Large" HorizontalOptions="Center" VerticalOptions="Center" />
         </Grid>
     </Shell.TitleView>
-
+    
     <Border Stroke="#C49B33"
         StrokeThickness="4"
         Padding="10"

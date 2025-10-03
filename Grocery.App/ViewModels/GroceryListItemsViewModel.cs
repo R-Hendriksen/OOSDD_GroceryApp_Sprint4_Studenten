@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using Grocery.App.Views;
 using Grocery.Core.Interfaces.Services;
 using Grocery.Core.Models;
+using Grocery.Core.Services;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 
@@ -15,6 +16,7 @@ namespace Grocery.App.ViewModels
         private readonly IGroceryListItemsService _groceryListItemsService;
         private readonly IProductService _productService;
         private readonly IFileSaverService _fileSaverService;
+        private readonly IClientService _clientService;
         private string searchText = "";
 
         public ObservableCollection<GroceryListItem> MyGroceryListItems { get; set; } = [];
@@ -25,11 +27,12 @@ namespace Grocery.App.ViewModels
         [ObservableProperty]
         string myMessage;
 
-        public GroceryListItemsViewModel(IGroceryListItemsService groceryListItemsService, IProductService productService, IFileSaverService fileSaverService)
+        public GroceryListItemsViewModel(IGroceryListItemsService groceryListItemsService, IProductService productService, IFileSaverService fileSaverService, IClientService clientService)
         {
             _groceryListItemsService = groceryListItemsService;
             _productService = productService;
             _fileSaverService = fileSaverService;
+            _clientService = clientService;
             Load(groceryList.Id);
         }
 
@@ -118,6 +121,13 @@ namespace Grocery.App.ViewModels
             item.Product.Stock++;
             _productService.Update(item.Product);
             OnGroceryListChanged(GroceryList);
+        }
+
+        [RelayCommand]
+        public async Task ShowBoughtProducts(int clientId)
+        {
+            if (_clientService.Get(clientId)?.Role != Role.Admin) return;
+            await Shell.Current.GoToAsync(nameof(Views.BoughtProductsView));
         }
     }
 }
