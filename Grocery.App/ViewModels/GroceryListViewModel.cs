@@ -35,5 +35,7 @@ namespace Grocery.App.ViewModels
             base.OnDisappearing();
             GroceryLists.Clear();
         }
+
+        
     }
 }
